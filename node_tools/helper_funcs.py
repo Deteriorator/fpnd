@@ -147,7 +147,7 @@ def find_ipv4_iface(addr_string, strip=True):
         return False
 
 
-def get_cachedir(dir_name='fpn_cache', user_dirs=False):
+def get_cachedir(dir_name='fpn_cache', user_dirs=True):
     """
     Get temp cachedir according to OS (create it if needed)
     * override the dir_name arg for non-cache data

@@ -9,7 +9,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def monoclock():
+def monoclock() -> float:
     "Try to get a monotonic clock value from python3"
     try:
         # Available in Python 3.3 and up.
@@ -21,14 +21,14 @@ def monoclock():
 class Cache:
     "Simple time-based expiring cache"
 
-    def __init__(self, defaultTimeout=300):  # 5 min default TTL
+    def __init__(self, defaultTimeout: int = 300):  # 5 min default TTL
         self.defaultTimeout = defaultTimeout
         self._cache = {}
 
     def get(self, key):
         if key in self._cache:
             value, settime, ttl = self._cache[key]
-            if settime >= monoclock() - ttl:
+            if int(settime) >= int(monoclock()) - ttl:
                 return value
             else:  # key expired, delete it
                 del self._cache[key]

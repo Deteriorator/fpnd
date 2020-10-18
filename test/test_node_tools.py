@@ -1009,6 +1009,7 @@ def test_handle_wedged_nodes():
     import diskcache as dc
     from node_tools import ctlr_data as ct
 
+    NODE_SETTINGS['use_exitnode'].append('beefea68e6')
     trie = ct.net_trie
     off_q = dc.Deque(directory='/tmp/test-oq')
     wdg_q = dc.Deque(directory='/tmp/test-wq')
@@ -1020,18 +1021,20 @@ def test_handle_wedged_nodes():
     wdg_q.append(node_id)
     handle_wedged_nodes(trie, wdg_q, off_q)
     assert list(wdg_q) == []
-    assert list(off_q) == ['beefea68e6']
+    assert list(off_q) == []
 
     wdg_q.append(tail_id)
     wdg_q.append(tail_id)
     handle_wedged_nodes(trie, wdg_q, off_q)
     assert list(wdg_q) == []
-    assert list(off_q) == ['beefea68e6', 'ee2eedb2e1']
+    assert list(off_q) == ['ee2eedb2e1']
 
     wdg_q.append(exit_id)
     wdg_q.append(exit_id)
-    with pytest.raises(AssertionError):
-        handle_wedged_nodes(trie, wdg_q, off_q)
+    handle_wedged_nodes(trie, wdg_q, off_q)
+    assert list(wdg_q) == []
+    assert list(off_q) == ['ee2eedb2e1']
+    NODE_SETTINGS['use_exitnode'].clear()
 
 
 def test_cleanup_state_tries():
